@@ -52,16 +52,29 @@ public string? PhoneNumber {get; private set; }
     // ... continue with others
 }
 
-// Old Constructor 
-/*public BankAccount(int id, string customer_Name,decimal account_Balance, decimal initialDeposit, byte pin) 
+public void Deposit(decimal amount)
 {
 
-    Id = id;
-    Customer_Name = customer_Name;
-    Account_Balance = account_Balance;
-    InitialDeposit =initialDeposit;
-    Pin = pin;
-} */
+    // check the edge cases
+    
+    if(amount <= 0 )throw new ArgumentException("The amount should be Posative!", nameof(amount));
+
+
+    // warning if the money is more then the usaul and later flag it if they proceed.
+    if(amount >= 10000) 
+    {
+
+    Console.WriteLine("That is large sume of Money!");
+    }
+
+    // update the balannce 
+    
+    Account_Balance += amount;
+
+
+
+}
+
 
 }
 

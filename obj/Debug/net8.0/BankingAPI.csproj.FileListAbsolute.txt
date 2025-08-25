@@ -12,3 +12,4 @@
 /home/sarif/learning-csharp/VariablePractice/BankingAPI/obj/Debug/net8.0/BankingAPI.pdb
 /home/sarif/learning-csharp/VariablePractice/BankingAPI/obj/Debug/net8.0/BankingAPI.genruntimeconfig.cache
 /home/sarif/learning-csharp/VariablePractice/BankingAPI/obj/Debug/net8.0/ref/BankingAPI.dll
+/home/sarif/learning-csharp/VariablePractice/BankingAPI/obj/Debug/net8.0/BankingAPI.sourcelink.json

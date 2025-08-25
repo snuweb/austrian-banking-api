@@ -20,6 +20,16 @@ public class Program
     myBank.PrintAllBankAccounts();
     Console.WriteLine($"One Of The bigest Banks in Austria is: {myBank.ToString()}");    
     Console.WriteLine($"One of The Bigest Banks in Austria  is: {myBankTwo}");
+
+    // Deposit Testing beging here!
+    var testAccount = myBank.CreateAccount(17, "Test Account", 88.0m, 39.0m,  23, "Xariif Magaalo", 154.0m , "141-353-55-555-3335");
+    Console.WriteLine($" Before Deposit test {testAccount.Account_Balance}");
+
+    testAccount.Deposit(9999.0m);
+    Console.WriteLine($"After Deposited {testAccount.Account_Balance:C}");
+    Console.WriteLine($"Before large Depostit: {testAccount.Account_Balance}" );
+    testAccount.Deposit(10000.0m);
+    Console.WriteLine($"After deposit i need to see Warning {testAccount.Account_Balance:C0}");
     }
 
 }
