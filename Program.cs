@@ -27,9 +27,19 @@ public class Program
 
     testAccount.Deposit(9999.0m);
     Console.WriteLine($"After Deposited {testAccount.Account_Balance:C}");
-    Console.WriteLine($"Before large Depostit: {testAccount.Account_Balance}" );
+    Console.WriteLine($"Before large Depostit: €{testAccount.Account_Balance:N2}" );
     testAccount.Deposit(10000.0m);
-    Console.WriteLine($"After deposit i need to see Warning {testAccount.Account_Balance:C0}");
+    Console.WriteLine($"Warning This is Larg some of Money!!!");
+    Console.WriteLine($"You Deposited: €  {testAccount.Account_Balance:N2}");
+
+    // Test Withdraw function
+    
+
+
+    // testWithdraw = myBankAccount.Withdraw(35030.0m);
+    myBankAccount.Withdraw(5.0m);
+   //Console.WriteLine($"Withraw happned: {withdraw}"); 
+
     }
 
 }

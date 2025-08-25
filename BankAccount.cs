@@ -1,5 +1,5 @@
 using System;
-
+using System.Threading;
 namespace BankingAPI;
 
 public class BankAccount 
@@ -71,10 +71,25 @@ public void Deposit(decimal amount)
     
     Account_Balance += amount;
 
-
-
 }
 
+// Withdraw 
+public void Withdraw(decimal amount)
+{
+
+    // Edch Case
+    if(amount < 10 ) throw new ArgumentException("Please choose the minumum of withraw 10 Euros ..", nameof(amount));
+        
+    // Balance check if zero no withdraw .. 
+    if(amount > Account_Balance) throw new ArgumentException("Your Balance is insuficent!", nameof(amount));
+    // update the balance and make the withdraw happen
+     Account_Balance -= amount;
+
+     Console.WriteLine($"Your withdrawal money is being processed please wait! {amount}");
+     Thread.Sleep(3000);
+     Console.WriteLine("Please take your Money!" );
+
+}
 
 }
 
