@@ -32,7 +32,7 @@ Console.WriteLine($"Ban `{BankName}` fully initialized");
 }
 
 
-public BankAccount CreateAccount( int id, string customer_Name, decimal account_Balance, decimal initial_Deposit, byte pin,
+public BankAccount CreateAccount( int id, string customer_Name, int accountNumber, decimal account_Balance, decimal initial_Deposit, int pin,
       string nickname , decimal creditLimit, string phoneNumber )
 {
     
@@ -40,7 +40,7 @@ public BankAccount CreateAccount( int id, string customer_Name, decimal account_
     
     int accountId = Accounts.Count + 1;
 
-  BankAccount newAccount = new BankAccount(id, customer_Name, account_Balance, initial_Deposit, pin, nickname, creditLimit, phoneNumber );
+  BankAccount newAccount = new BankAccount(id, customer_Name, accountNumber, account_Balance, initial_Deposit, pin, nickname, creditLimit, phoneNumber );
     
     
     Accounts.Add(newAccount);

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Threading;
 namespace BankingAPI;
 
@@ -7,16 +8,17 @@ public class BankAccount
 
 public int Id {get; set; }
 public string Customer_Name {get; private set; }
+public int   AccountNumber {get; private set;}
 public decimal Account_Balance {get; private set; }
-public byte Pin {get; private set; }
+public int Pin {get; private set; }
 public decimal Initial_Deposit {get; private set; }
 public string? Nickname {get; private set; }
 public decimal? CreditLimit {get; private set; }
 public string? PhoneNumber {get; private set; }
 
 
- public BankAccount(int id, string customer_Name, decimal account_Balance, decimal initial_Deposit,
-         byte pin, string? nickname = null, decimal? creditLimit = null, string? phoneNumber = null)
+ public BankAccount(int id, string customer_Name,int accountNumber, decimal account_Balance, decimal initial_Deposit,
+         int pin, string? nickname = null, decimal? creditLimit = null, string? phoneNumber = null)
 {
     // Add these validation patterns one by one:
     
@@ -30,6 +32,9 @@ public string? PhoneNumber {get; private set; }
     // 2. Then validate customer name (null/empty check)
     if(string.IsNullOrWhiteSpace(customer_Name)) 
         throw new ArgumentException("Fadlan Magaca macamilka geli", nameof(customer_Name));
+
+    // AccountNumber check if  null 
+    if(accountNumber == 0) throw new ArgumentException("Account Number should not be null or empty", nameof(accountNumber));
     // Pattern: if (string.IsNullOrWhiteSpace(customer_Name)) ...
     
     // 3. Validate account balance (cannot be negative)
@@ -45,6 +50,7 @@ public string? PhoneNumber {get; private set; }
     // 5. Finally assign the validated values
     Id = id;
     Customer_Name = customer_Name.Trim();
+    AccountNumber = accountNumber;
     Account_Balance = account_Balance;
     Initial_Deposit = initial_Deposit;
     Pin = pin;
@@ -86,9 +92,36 @@ public void Withdraw(decimal amount)
      Account_Balance -= amount;
 
      Console.WriteLine($"Your withdrawal money is being processed please wait! {amount}");
-     Thread.Sleep(3000);
+     //Thread.Sleep(3000);
      Console.WriteLine("Please take your Money!" );
 
+}
+
+    // Transfer Method
+    public bool Transfer(BankAccount destinationAccount, decimal amount)
+    {
+
+        // Check null and and negative numbers 
+        if (destinationAccount == null) throw new ArgumentNullException(nameof(destinationAccount));
+        // Check amount 
+        if (amount <= 0)
+            throw new ArgumentException("Transfer amount must be posative", nameof(amount));
+            // Same Account check
+        if (destinationAccount.Id == this.Id)
+            throw new ArgumentException("Can not transfer to same account!", nameof(destinationAccount.Id));
+
+        //Balance Check
+        if (amount > this.Account_Balance)
+            throw new ArgumentException("Your account balance is in sufficent!", nameof(amount));
+
+        // make the transer
+        this.Account_Balance -= amount;
+        destinationAccount.Account_Balance += amount;
+
+
+            // Retrun False or True
+
+        return true;
 }
 
 }
