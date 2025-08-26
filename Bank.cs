@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 
 namespace BankingAPI;
 
@@ -70,28 +72,34 @@ Console.WriteLine($"Phone Number: {account.PhoneNumber:F0}");
 
 
 
-//Console.WriteLine($"Total Accounts Count: {balancetotal:C}");
-//Console.WriteLine($" NickName: {displayname}");
-//Console.WriteLine($"Balanc-ga guud waa: {balance}");
-
 }
 
-/* public void PrintAllBanks()
-{
+    // Find High Value Accounts 
+    public List<BankAccount> FindWithHighBalance(decimal minimumBalance)
+    {
 
-foreach(Bank banks in Bank)
-{
+        //check  Edge Cases
+        
+        if (minimumBalance < 0) throw new ArgumentException("Minumal value should be Posative. ", nameof(minimumBalance));
 
-Console.WriteLine($"All Banks are: {banks.BankName:S}");
-}
+        var fatAccounts = Accounts.Where(account => account.Account_Balance >= minimumBalance).ToList();
 
-}
-*/
+  
 
-public override string ToString() 
-{
+        return fatAccounts;
+
+    }
 
 
-    return $"Bank: {BankName} | Code: {BankCode} | SwiftCode: {SwiftCode} Address: {Address} | Accounts: {Accounts.Count} ";
-}
+
+
+
+    
+
+public override string ToString()
+    {
+
+
+        return $"Bank: {BankName} | Code: {BankCode} | SwiftCode: {SwiftCode} Address: {Address} | Accounts: {Accounts.Count} ";
+    }
 }

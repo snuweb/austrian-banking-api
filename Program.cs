@@ -66,9 +66,21 @@ public class Program
 
         // Printing the Balance of the Receiver if he got the money to his account
         Console.WriteLine($"Reciver Blance after he/she got the amount in the account. € {receiver.Account_Balance}");
-        Console.WriteLine($"Sender after he/she received: € {sender.Account_Balance:C:0}");
+        Console.WriteLine($"Sender after he/she received: € {sender.Account_Balance}");
 
+
+        // Printing Fat Accounts 
+        Console.WriteLine("\n ==== Start from here Fat Accounts");
+        var fatFinder = myBank.FindWithHighBalance(23.0m);
+        foreach (var accounts in fatFinder)
+        {
+            Console.WriteLine($"Account Name: {accounts.Customer_Name} Account Balance: {accounts.Account_Balance}");
+        }
+       
     }
+
+
+
     
 
 
