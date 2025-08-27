@@ -76,7 +76,10 @@ public class Program
         {
             Console.WriteLine($"Account Name: {accounts.Customer_Name} Account Balance: {accounts.Account_Balance}");
         }
-       
+
+        testAccount.ShowLastTransactions();
+
+
     }
 
 
