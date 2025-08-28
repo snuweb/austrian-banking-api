@@ -30,7 +30,7 @@ public Bank(string bankName, string bankCode, string swiftCode, string address )
     Address = address;
     Accounts = new List<BankAccount>();
     EstablishedDate = DateTime.Now;
-Console.WriteLine($"Ban `{BankName}` fully initialized");
+Console.WriteLine($"Bank `{BankName}` fully initialized");
 }
 
 

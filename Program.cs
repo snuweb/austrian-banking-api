@@ -52,7 +52,6 @@ public class Program
         {
 
             bool sucess = sender.Transfer(receiver, 160.0m);
-            bool sucees2 = receiver.Transfer(sender, 156.0m);
             Console.WriteLine($"Transfer sucess: {sucess}");
             Console.WriteLine($"After: Muniiro €{sender.Account_Balance}");
 
@@ -63,6 +62,12 @@ public class Program
             Console.WriteLine($"It failed due low balance! {ex.Message} ");
 
         }
+
+        Console.WriteLine("\n=== SENDER'S TRANSACTION HISTORY ===");
+        sender.ShowLastTransactions();
+
+        Console.WriteLine("\n=== RECEIVER'S TRANSACTION HISTORY ===");
+        receiver.ShowLastTransactions();
 
         // Printing the Balance of the Receiver if he got the money to his account
         Console.WriteLine($"Reciver Blance after he/she got the amount in the account. € {receiver.Account_Balance}");

@@ -3,6 +3,8 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Threading;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Runtime;
 
 
 namespace BankingAPI;
@@ -20,7 +22,7 @@ public class BankAccount
     public string? Nickname { get; private set; }
     public decimal? CreditLimit { get; private set; }
     public string? PhoneNumber { get; private set; }
-    private List<Transaction> _transactions = new List<Transaction>();
+    private  List<Transaction> _transactions = new List<Transaction>();
     public BankAccount(int id, string customer_Name, int accountNumber, decimal account_Balance, decimal initial_Deposit,
             int pin, string? nickname = null, decimal? creditLimit = null, string? phoneNumber = null)
     {
@@ -30,7 +32,7 @@ public class BankAccount
         CreditLimit = creditLimit;
         PhoneNumber = phoneNumber;
         // 1. First, validate the ID (should be positive)
-        // Pattern: if (id <= 0) throw new ArgumentException("message", nameof(id));
+        // Pattern: if (id <= 0) throw  ArgumentException("message", nameof(id));
         if (id <= 0)
             throw new ArgumentException("Id ga number sii posative ah", nameof(id));
         // 2. Then validate customer name (null/empty check)
@@ -48,7 +50,7 @@ public class BankAccount
 
         // 4. Business rule: initialDeposit should match account_Balance
         if (initial_Deposit <= 0)
-            throw new ArgumentException("Balanace should not be null or negative", nameof(initial_Deposit));
+            throw  new ArgumentException("Balanace should not be null or negative", nameof(initial_Deposit));
         // Pattern: if (initialDeposit != account_Balance) ...
 
         // 5. Finally assign the validated values
@@ -83,11 +85,10 @@ public class BankAccount
 
         Account_Balance += amount;
 
-        var transaction = new Transaction(
+        var transaction =  new Transaction(
             "Deposit",
             amount,
             DateTime.Now,
-
             this.AccountId,
             this.Account_Balance
         );
@@ -106,7 +107,7 @@ public class BankAccount
         if (amount < 10) throw new ArgumentException("Please choose the minumum of withraw 10 Euros ..", nameof(amount));
 
         // Balance check if zero no withdraw .. 
-        if (amount > Account_Balance) throw new ArgumentException("Your Balance is insuficent!", nameof(amount));
+        if (amount > Account_Balance) throw new  ArgumentException("Your Balance is insuficent!", nameof(amount));
         // update the balance and make the withdraw happen
         Account_Balance -= amount;
 
@@ -114,6 +115,15 @@ public class BankAccount
         //Thread.Sleep(3000);
         Console.WriteLine("Please take your Money!");
 
+        var transaction = new  Transaction(
+            "Self-service withdrawal",
+            amount,
+            DateTime.Now,
+            this.AccountId,
+            this.Account_Balance
+        );
+
+        _transactions.Add(transaction);
     }
 
     // Transfer Method
@@ -137,10 +147,51 @@ public class BankAccount
         this.Account_Balance -= amount;
         destinationAccount.Account_Balance += amount;
 
+        // Transaction register
 
-        // Retrun False or True
+        var transaction = new  Transaction(
+            "TRANSFER_SEND",
+            amount,
+            DateTime.Now,
+            this.AccountId,
+            this.Account_Balance,
+            this.AccountId,
+            destinationAccount.AccountId
+        );
+
+
+        // _transactions(senderTransaction);
+        _transactions.Add(transaction);
+
+        var receivedTransection = new  Transaction(
+            "TRANSFER_RECEIVER",
+            amount,
+            DateTime.Now,
+            destinationAccount.AccountId,
+            destinationAccount.Account_Balance,
+            this.AccountId,
+            destinationAccount.AccountId
+            
+            );
+        destinationAccount.RecordTransaction(receivedTransection);
+        //_transactions.Add(receivedTransection);
+        // save the Receiver transaction deteils 
+        //  destinationAccount._transactions.Add(receivedTransection);
+
+
 
         return true;
+    }
+
+    public void RecordTransaction(Transaction transaction)
+    {
+
+
+        if (transaction == null) throw new ArgumentNullException("This is Null Value not allowed", nameof(transaction));
+
+        _transactions.Add(transaction);
+      
+        
     }
 
 
@@ -155,6 +206,6 @@ public class BankAccount
         }
         var lastTransaction = _transactions[_transactions.Count - 1];
         Console.WriteLine($"Printing Transactions: {lastTransaction.TransactionType} Transaction Amount: {lastTransaction.Amount}");
-}
+    }
 }
 
