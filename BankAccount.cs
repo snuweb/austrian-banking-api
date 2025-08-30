@@ -5,7 +5,7 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime;
-
+using System.Linq;
 
 namespace BankingAPI;
 
@@ -22,7 +22,7 @@ public class BankAccount
     public string? Nickname { get; private set; }
     public decimal? CreditLimit { get; private set; }
     public string? PhoneNumber { get; private set; }
-    private  List<Transaction> _transactions = new List<Transaction>();
+    private List<Transaction> _transactions = new List<Transaction>();
     public BankAccount(int id, string customer_Name, int accountNumber, decimal account_Balance, decimal initial_Deposit,
             int pin, string? nickname = null, decimal? creditLimit = null, string? phoneNumber = null)
     {
@@ -50,7 +50,7 @@ public class BankAccount
 
         // 4. Business rule: initialDeposit should match account_Balance
         if (initial_Deposit <= 0)
-            throw  new ArgumentException("Balanace should not be null or negative", nameof(initial_Deposit));
+            throw new ArgumentException("Balanace should not be null or negative", nameof(initial_Deposit));
         // Pattern: if (initialDeposit != account_Balance) ...
 
         // 5. Finally assign the validated values
@@ -85,7 +85,7 @@ public class BankAccount
 
         Account_Balance += amount;
 
-        var transaction =  new Transaction(
+        var transaction = new Transaction(
             "Deposit",
             amount,
             DateTime.Now,
@@ -107,7 +107,7 @@ public class BankAccount
         if (amount < 10) throw new ArgumentException("Please choose the minumum of withraw 10 Euros ..", nameof(amount));
 
         // Balance check if zero no withdraw .. 
-        if (amount > Account_Balance) throw new  ArgumentException("Your Balance is insuficent!", nameof(amount));
+        if (amount > Account_Balance) throw new ArgumentException("Your Balance is insuficent!", nameof(amount));
         // update the balance and make the withdraw happen
         Account_Balance -= amount;
 
@@ -115,7 +115,7 @@ public class BankAccount
         //Thread.Sleep(3000);
         Console.WriteLine("Please take your Money!");
 
-        var transaction = new  Transaction(
+        var transaction = new Transaction(
             "Self-service withdrawal",
             amount,
             DateTime.Now,
@@ -149,7 +149,7 @@ public class BankAccount
 
         // Transaction register
 
-        var transaction = new  Transaction(
+        var transaction = new Transaction(
             "TRANSFER_SEND",
             amount,
             DateTime.Now,
@@ -163,7 +163,7 @@ public class BankAccount
         // _transactions(senderTransaction);
         _transactions.Add(transaction);
 
-        var receivedTransection = new  Transaction(
+        var receivedTransection = new Transaction(
             "TRANSFER_RECEIVER",
             amount,
             DateTime.Now,
@@ -171,7 +171,7 @@ public class BankAccount
             destinationAccount.Account_Balance,
             this.AccountId,
             destinationAccount.AccountId
-            
+
             );
         destinationAccount.RecordTransaction(receivedTransection);
         //_transactions.Add(receivedTransection);
@@ -190,8 +190,8 @@ public class BankAccount
         if (transaction == null) throw new ArgumentNullException("This is Null Value not allowed", nameof(transaction));
 
         _transactions.Add(transaction);
-      
-        
+
+
     }
 
 
@@ -207,5 +207,69 @@ public class BankAccount
         var lastTransaction = _transactions[_transactions.Count - 1];
         Console.WriteLine($"Printing Transactions: {lastTransaction.TransactionType} Transaction Amount: {lastTransaction.Amount}");
     }
+
+
+
+    // Get latest transaction by count 
+    public List<Transaction> GetLastTransactions(int count)
+    {
+
+        // Edge case
+        if (count <= 0) throw new ArgumentException("Number must be Posative! ", nameof(count));
+
+        if (_transactions.Count == 0)
+        {
+            return new List<Transaction>();
+        }
+
+        return _transactions
+        .OrderByDescending(t => t.Timestamp)
+        .Take(count)
+        .ToList();
+
+
+
+    }
+
+
+    // Rage Date time for transection query 
+    public List<Transaction> GetTransactionsByRange(DateTime startDate, DateTime endDate)
+    {
+        if (startDate > endDate)
+            throw new ArgumentException("Start data should be greater then end data ", nameof(startDate));
+
+        return _transactions.Where(t => t.Timestamp >= startDate && t.Timestamp <= endDate).OrderByDescending(t => t.Timestamp).ToList();
+    }
+
+    public List<Transaction> GetTransactionsByType(string transectionType)
+    {
+
+        if (string.IsNullOrEmpty(transectionType)) throw new ArgumentException("Please provied Value tha tis not Null or or empty! ", nameof(transectionType));
+
+        return _transactions.Where(t => t.TransactionType.Equals(transectionType, StringComparison.OrdinalIgnoreCase)).OrderByDescending(t => t.Timestamp).ToList();
+    }
+    // Transaction Type 
+
+    /* public List<Transaction> GetTransactionByType(string transactionType)
+     {
+         // Edge Case check 
+         if (string.IsNullOrWhiteSpace(transactionType))
+             throw new ArgumentNullException("Transaction Type can not be Null ", nameof(transactionType));
+         var transactionTypeSend = "TRANSFER_SEND";
+         var transactoinTypeReceive = "TRANSFER_RECEIVE";
+         var transactionTyTypeDeposit = "Deposit";
+         var transactoinTypeWithdraw = "WITHDRAW";
+         var res = transactionType;
+         if (transactionType == transactionTypeSend)
+         {
+
+             return _transactions.Where(t => t.TransactionType == transactionType).OrderByDescending(t => t.TransactionType).ToList();
+         }
+
+         return _transactions;
+     }
+     */
+
+
 }
 

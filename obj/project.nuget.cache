@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "91DpuZrTDSc=",
+  "dgSpecHash": "tDmNLrwDtJ8=",
   "success": true,
-  "projectFilePath": "/home/sarif/learning-csharp/VariablePractice/BankingAPI/BankingAPI.csproj",
+  "projectFilePath": "\\\\wsl.localhost\\Ubuntu\\home\\sarif\\learning-csharp\\VariablePractice\\BankingAPI\\BankingAPI.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

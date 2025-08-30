@@ -1,4 +1,6 @@
-﻿using System;
+using System;
+using System.Data;
+using Microsoft.VisualBasic;
 
 namespace BankingAPI;
 
@@ -31,10 +33,6 @@ public class Program
         testAccount.Deposit(10000.0m);
         Console.WriteLine($"Warning This is Larg some of Money!!!");
         Console.WriteLine($"You Deposited: €  {testAccount.Account_Balance:N2}");
-
-        // Test Withdraw function
-
-
 
         // testWithdraw = myBankAccount.Withdraw(35030.0m);
         myBankAccount.Withdraw(10.0m);
@@ -73,7 +71,6 @@ public class Program
         Console.WriteLine($"Reciver Blance after he/she got the amount in the account. € {receiver.Account_Balance}");
         Console.WriteLine($"Sender after he/she received: € {sender.Account_Balance}");
 
-
         // Printing Fat Accounts 
         Console.WriteLine("\n ==== Start from here Fat Accounts");
         var fatFinder = myBank.FindWithHighBalance(23.0m);
@@ -84,13 +81,45 @@ public class Program
 
         testAccount.ShowLastTransactions();
 
+        Console.WriteLine("\n ==== Testing last Transections ====");
+        var lastThree = testAccount.GetLastTransactions(3);
+        Console.WriteLine($"Sender has  {lastThree.Count} recent transactions: ");
+
+        foreach (var tx in lastThree)
+        {
+            Console.WriteLine($" {tx.TransactionType}: €{tx.Amount} at {tx.Timestamp:yyyy-MM-dd HH:mm}");
+        }
+
+        Console.WriteLine($"\n ==== Transection History with Data Time ===============");
+        var yestarday = DateTime.Now.AddDays(-1);
+        var tomorrow = DateTime.Now.AddDays(1);
+        var resentTX = testAccount.GetTransactionsByRange(yestarday, tomorrow);
+        Console.WriteLine($"Rescent Transactoins  {resentTX.Count} i found. ");
+
+        // Transaction By Type Get
+
+        Console.WriteLine("\n  === Transaction By Type startis here");
+        var trxType = testAccount.GetTransactionsByType("Deposit");
+        foreach (var trx in trxType)
+        {
+            Console.WriteLine($"Deposit € {trx.Amount} Timestamp: {trx.Timestamp}  Balance After Deposit: € {trx.BalanceAfter} ");
+        }
+        //  Console.WriteLine($"The Transectoin list of {trxType} are found! ");
+
+        // Query Practice 
+        int[] queryArray = [0, 1, 2, 3, 4, 5, 6, 7];
+
+        var queryVar = from quer in queryArray
+                       where (quer % 2) == 0
+                       select quer;
+
+        foreach (int n in queryArray)
+        {
+            Console.WriteLine("{0,1}", n);
+        }
 
     }
 
-
-
-    
-
-
 }
+
 
