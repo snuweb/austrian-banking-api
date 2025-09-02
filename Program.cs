@@ -115,8 +115,15 @@ public class Program
 
         foreach (int n in queryArray)
         {
-            Console.WriteLine("{0,1}", n);
+            Console.WriteLine("{0,1} ", n);
         }
+
+
+        var yesterday = DateTime.Now.AddDays(-1);
+        var today = DateTime.Now;
+        testAccount.TotalDailyTransaction(yesterday, today);
+
+        testAccount.ShowLastTransactionalAnalytics(yestarday, today);
 
     }
 

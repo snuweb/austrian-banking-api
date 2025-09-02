@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime;
 using System.Linq;
+using System.Data;
+using System.Collections.Immutable;
 
 namespace BankingAPI;
 
@@ -248,28 +250,47 @@ public class BankAccount
 
         return _transactions.Where(t => t.TransactionType.Equals(transectionType, StringComparison.OrdinalIgnoreCase)).OrderByDescending(t => t.Timestamp).ToList();
     }
-    // Transaction Type 
 
-    /* public List<Transaction> GetTransactionByType(string transactionType)
-     {
-         // Edge Case check 
-         if (string.IsNullOrWhiteSpace(transactionType))
-             throw new ArgumentNullException("Transaction Type can not be Null ", nameof(transactionType));
-         var transactionTypeSend = "TRANSFER_SEND";
-         var transactoinTypeReceive = "TRANSFER_RECEIVE";
-         var transactionTyTypeDeposit = "Deposit";
-         var transactoinTypeWithdraw = "WITHDRAW";
-         var res = transactionType;
-         if (transactionType == transactionTypeSend)
-         {
+    // Total Daily Transaction function
 
-             return _transactions.Where(t => t.TransactionType == transactionType).OrderByDescending(t => t.TransactionType).ToList();
-         }
+    public void TotalDailyTransaction(DateTime startTime, DateTime endTime)
+    {
 
-         return _transactions;
-     }
-     */
+        // Edge Case if start time is zoro and end time zero return exceptoin with error message
+        if (startTime > endTime) throw new ArgumentException("Start time should not be greater then end time ", nameof(startTime));
 
+
+
+        //        var dailyTotals = new Dictionary<DateTime, decimal>();
+
+        var filtredDailyTransaction = _transactions.Where(t => t.Timestamp >= startTime && t.Timestamp <= endTime);
+
+        var groupedFiltredData = filtredDailyTransaction.GroupBy(t => t.Timestamp.Date);
+        foreach (var dataGroup in groupedFiltredData)
+        {
+
+            Console.WriteLine($"Date: {dataGroup.Key:dd.MM.yyyy}, Total: €{dataGroup.Sum(t => t.Amount)}");
+
+        }
+
+
+        if (!filtredDailyTransaction.Any())
+        {
+            Console.WriteLine("No transactions Found in this period.");
+            return;
+        }
+
+        Console.WriteLine("\n== AUSTRIAN BANK ANALYTICS ===");
+        Console.WriteLine($"Period: {startTime:dd.MM.yyyy} to {endTime:dd.MM.yyyy}");
+        Console.WriteLine($"Total Trasactions: {filtredDailyTransaction.Count()}");
+        Console.WriteLine($"Total Amount: €{filtredDailyTransaction.Sum(t => t.Amount):N2}");
+        Console.WriteLine($"Average Amount: €{filtredDailyTransaction.Average(t => t.Amount):N2}");
+        Console.WriteLine($"Minimum Transaction: €{filtredDailyTransaction.Min(t => t.Amount):N2}");
+        Console.WriteLine($"Maxmimum Transaction: €{filtredDailyTransaction.Max(t => t.Amount):N2}");
+
+    }
+
+    
 
 }
 
