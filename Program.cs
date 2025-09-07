@@ -123,7 +123,7 @@ public class Program
         var today = DateTime.Now;
         testAccount.TotalDailyTransaction(yesterday, today);
 
-        testAccount.ShowLastTransactionalAnalytics(yestarday, today);
+        
 
     }
 
